@@ -1,0 +1,24 @@
+name: Auto Download Cloud Mail Repo
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # 每天凌晨 0 点 UTC
+  workflow_dispatch:
+
+jobs:
+  download-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up working directory
+        run: mkdir -p cloud-mail-repo
+
+      - name: Download public repository (cloud-mail)
+        run: |
+          git clone --depth=1 https://github.com/eoao/cloud-mail.git cloud-mail-repo/latest
+          cd cloud-mail-repo/latest
+          git fetch --all
+          git pull
+        # 如果你想保留历史，可以去掉 --depth=1
+
+      - name: Show downloaded files
+        run: ls -al cloud-mail-repo/latest
